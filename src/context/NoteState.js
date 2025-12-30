@@ -3,8 +3,7 @@ import NoteContaxt from "./NoteContext";
 
 export default function NoteState(props) {
   const host = "http://localhost:5000";
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY5MTU2OTE5NWM1MzYyYzcwYTgzZTNmMSIsIm5hbWUiOiJIYXJyeTYiLCJlbWFpbCI6Im9uYW1wcjZAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTUkNG5kU3d0NWVDdmdkdTFqLm1SOEg5T3Z1RWU3cHJJZnBxdVNKVDZrdHlsbXFmQUNJVzloLjIiLCJjcmVhdGVkQXQiOiIyMDI1LTExLTEzVDA1OjE0OjAxLjM3NFoiLCJ1cGRhdGVkQXQiOiIyMDI1LTExLTEzVDA1OjE0OjAxLjM3NFoiLCJfX3YiOjB9LCJpYXQiOjE3NjQxMzI0ODJ9.T8UJ3nBmNF1P_vgQBiWufKKl1z3vdFRIoQR-8I5P3fg";
+  const token = localStorage.getItem("token");
   // const notesInit = [];
   const [notes, setNotes] = useState([]);
   const getAllNotes = async () => {
@@ -27,13 +26,6 @@ export default function NoteState(props) {
       setNotes(json.payload);
     } catch (error) {
       console.log("error!");
-      setNotes(
-        notes.concat({
-          title: "Note not Found!",
-          description: "Api is not working.",
-          tag: "",
-        })
-      );
     }
   };
 
@@ -76,6 +68,8 @@ export default function NoteState(props) {
     }
     setNotes(edNotes);
 
+    console.log(id);
+
     // Calling api =======================
     const res = await fetch(`${host}/api/note/${id}`, {
       method: "PUT",
@@ -90,6 +84,7 @@ export default function NoteState(props) {
     );
     modal.hide();
 
+    // console.log(edNote);
     console.log(res);
   };
 
@@ -113,9 +108,30 @@ export default function NoteState(props) {
     setNotes(newNotes);
     console.log(newNotes);
   };
+
+  // showing alerts
+  const [alert, setAlert] = useState(null);
+  const showAlert = (msg, type) => {
+    setAlert({
+      msg,
+      type,
+    });
+    setTimeout(() => {
+      setAlert(null);
+    }, 1500);
+  };
   return (
     <NoteContaxt.Provider
-      value={{ notes, setNotes, addNewNote, editNote, deleteNote, getAllNotes }}
+      value={{
+        notes,
+        setNotes,
+        addNewNote,
+        editNote,
+        deleteNote,
+        getAllNotes,
+        alert,
+        showAlert,
+      }}
     >
       {props.children}
     </NoteContaxt.Provider>

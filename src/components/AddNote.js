@@ -3,16 +3,18 @@ import NoteContaxt from "../context/NoteContext";
 
 function AddNote() {
   const context = useContext(NoteContaxt);
-  const { addNewNote } = context;
+  const { addNewNote, showAlert } = context;
   const [note, setNote] = useState({
     title: "",
     description: "",
-    tag: "Default",
+    tag: "",
   });
   // add notes ==================
   const addNote = (e) => {
     e.preventDefault();
     addNewNote(note);
+    setNote({ title: "", description: "", tag: "" });
+    showAlert("Note has been added successfully!", "Success");
   };
   const onChange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value });
@@ -32,6 +34,8 @@ function AddNote() {
             placeholder="Title"
             name="title"
             required
+            minLength={5}
+            value={note.title}
             onChange={onChange}
           />
         </div>
@@ -46,6 +50,8 @@ function AddNote() {
             name="description"
             placeholder="Description"
             required
+            minLength={8}
+            value={note.description}
             onChange={onChange}
           ></textarea>
         </div>
@@ -59,6 +65,7 @@ function AddNote() {
             id="exampleFormControlInput1"
             placeholder="Tag"
             name="tag"
+            value={note.tag}
             onChange={onChange}
           />
         </div>

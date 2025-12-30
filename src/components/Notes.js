@@ -36,6 +36,9 @@ function Notes() {
       <AddNote />
       <h1>Notes</h1>
       <div className="container row">
+        <div className="fs-2 fw-bolder text-warning">
+          {notes.length === 0 && `No notes to display!`}
+        </div>
         {notes.map((note) => {
           return (
             <NoteItem note={note} onEdid={openEditModal} key={Math.random()} />
