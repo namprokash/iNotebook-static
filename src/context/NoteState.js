@@ -2,9 +2,24 @@ import React, { useState } from "react";
 import NoteContaxt from "./NoteContext";
 
 export default function NoteState(props) {
-  const host = "http://localhost:5000";
+  const host = "https://inotebook-server-aqfi.onrender.com";
+  // const host = "http://localhost:5000";
   const token = localStorage.getItem("token");
-  // const notesInit = [];
+
+  // showing alerts===========================================
+  const [alert, setAlert] = useState(null);
+  const showAlert = (msg, type) => {
+    setAlert({
+      msg,
+      type,
+    });
+    setTimeout(() => {
+      setAlert(null);
+    }, 1500);
+  };
+
+  //  getting Notes ===========================================
+
   const [notes, setNotes] = useState([]);
   const getAllNotes = async () => {
     // Calling api
@@ -29,7 +44,8 @@ export default function NoteState(props) {
     }
   };
 
-  // Add note ================
+  // Add note ===================================================
+
   const addNewNote = async ({ title, description, tag }) => {
     const note = {
       title,
@@ -51,7 +67,7 @@ export default function NoteState(props) {
     console.log("Added new");
     setNotes(notes.concat(note));
   };
-  // edit notes ==================
+  // edit notes ===========================================================
   const editNote = async (edNote) => {
     const { id, title, description, tag } = edNote;
 
@@ -68,8 +84,6 @@ export default function NoteState(props) {
     }
     setNotes(edNotes);
 
-    console.log(id);
-
     // Calling api =======================
     const res = await fetch(`${host}/api/note/${id}`, {
       method: "PUT",
@@ -83,43 +97,61 @@ export default function NoteState(props) {
       document.getElementById("editModal")
     );
     modal.hide();
-
-    // console.log(edNote);
     console.log(res);
+    showAlert("Note updated successfully!", "Success");
   };
 
-  //================= delete notes ==================
+  //================= Delete notes =============================================
 
   const deleteNote = async (id) => {
-    // server ===============
-    const res = await fetch(`${host}/api/note/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // or credentials: include
-      },
-    });
-    console.log(await res.json());
+    const isConfirm = window.confirm("Are you sure?");
 
-    // client =============
-    const newNotes = notes.filter((note) => {
-      return note._id !== id;
-    });
-    setNotes(newNotes);
-    console.log(newNotes);
+    if (isConfirm) {
+      // server ===============
+      const res = await fetch(`${host}/api/note/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // or credentials: include
+        },
+      });
+      console.log(await res.json());
+
+      // client =============
+      const newNotes = notes.filter((note) => {
+        return note._id !== id;
+      });
+      setNotes(newNotes);
+      showAlert("Note Deleted successfully!", "Delete");
+    }
   };
 
-  // showing alerts
-  const [alert, setAlert] = useState(null);
-  const showAlert = (msg, type) => {
-    setAlert({
-      msg,
-      type,
-    });
-    setTimeout(() => {
-      setAlert(null);
-    }, 1500);
+  //  showing prifile ===========================================
+  const [self, setSelf] = useState([]);
+  const profile = async () => {
+    // Calling api
+    try {
+      const res = await fetch(`${host}/api/logedin`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!res.ok) {
+        console.log("Error!");
+        return;
+      }
+
+      const json = await res.json();
+      console.log(json);
+      setSelf(json);
+    } catch (error) {
+      console.log("error!");
+    }
   };
+
   return (
     <NoteContaxt.Provider
       value={{
@@ -131,6 +163,8 @@ export default function NoteState(props) {
         getAllNotes,
         alert,
         showAlert,
+        profile,
+        self,
       }}
     >
       {props.children}

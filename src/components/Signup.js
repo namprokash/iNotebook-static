@@ -3,12 +3,14 @@ import { useNavigate } from "react-router-dom";
 import NoteContaxt from "../context/NoteContext";
 
 function Signup() {
+  const host = "https://inotebook-server-aqfi.onrender.com";
+  // const host = "http://localhost:5000";
   const constaxt = useContext(NoteContaxt);
   const { showAlert } = constaxt;
   const navigate = useNavigate();
   const signup = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:5000/api/user", {
+    const res = await fetch(`${host}api/user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

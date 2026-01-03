@@ -7,6 +7,7 @@ function NoteItem(props) {
   const context = useContext(NoteContaxt);
   const { deleteNote } = context;
   const { note, onEdid } = props;
+
   return (
     <div className="col-md-4 my-3">
       <div className="card">
