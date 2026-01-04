@@ -1,5 +1,5 @@
 import {
-  BrowserRouter as Router,
+  // BrowserRouter as Router,
   Routes,
   Route,
   HashRouter,

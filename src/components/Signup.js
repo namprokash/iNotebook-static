@@ -10,7 +10,7 @@ function Signup() {
   const navigate = useNavigate();
   const signup = async (e) => {
     e.preventDefault();
-    const res = await fetch(`${host}api/user`, {
+    const res = await fetch(`${host}/api/user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
