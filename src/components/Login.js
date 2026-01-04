@@ -8,17 +8,20 @@ function Login() {
   const navigate = useNavigate();
   const loginHandler = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:5000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const res = await fetch(
+      "https://inotebook-server-aqfi.onrender.com/api/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-      body: JSON.stringify({
-        email: e.target.email.value,
-        password: e.target.password.value,
-      }),
-    });
+        body: JSON.stringify({
+          email: e.target.email.value,
+          password: e.target.password.value,
+        }),
+      }
+    );
 
     const json = await res.json();
     if (json.success) {

@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  HashRouter,
+} from "react-router";
 import Navbar from "./components/Navbar";
 import About from "./components/About";
 import Profile from "./components/Profile";
@@ -10,8 +15,10 @@ import Alerts from "./components/Alerts";
 function App() {
   return (
     <>
-      <NoteState>
-        <Router>
+      {" "}
+      <HashRouter>
+        <NoteState>
+          {/* <Router> */}
           <Navbar />
           <Alerts />
           <h1 className="text-center ">iNotebook</h1>
@@ -24,8 +31,9 @@ function App() {
               <Route path="/signup" element={<Signup />} />
             </Routes>
           </div>
-        </Router>
-      </NoteState>
+          {/* </Router>{" "} */}
+        </NoteState>
+      </HashRouter>
     </>
   );
 }
